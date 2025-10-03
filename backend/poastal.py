@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 import os, sys
 sys.path.append(os.path.abspath('./modules'))
@@ -86,7 +86,54 @@ def poastal():
             }
         })
     else:
-        return 'No email address provided.'
+        html_response = """
+        <!DOCTYPE html>
+        <html lang=\"en\">
+        <head>
+            <meta charset=\"utf-8\">
+            <title>Poastal Email Lookup</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 2rem; background: #0f172a; color: #e2e8f0; }
+                h1 { color: #38bdf8; }
+                form { margin-top: 1.5rem; }
+                label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+                input[type=email] {
+                    padding: 0.6rem 0.8rem;
+                    width: 100%;
+                    max-width: 26rem;
+                    border: 1px solid #475569;
+                    border-radius: 0.5rem;
+                    background: #1e293b;
+                    color: inherit;
+                }
+                button {
+                    margin-top: 1rem;
+                    padding: 0.6rem 1.4rem;
+                    border: none;
+                    border-radius: 0.5rem;
+                    background: #38bdf8;
+                    color: #0f172a;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+                button:hover { background: #0ea5e9; }
+                code { background: #1e293b; padding: 0.2rem 0.4rem; border-radius: 0.3rem; }
+            </style>
+        </head>
+        <body>
+            <h1>Poastal Email Lookup</h1>
+            <p>Provide an email address to retrieve OSINT results for that account.</p>
+            <form action="/" method="get">
+                <label for="email">Email address</label>
+                <input id="email" name="email" type="email" placeholder="example@gmail.com" required>
+                <button type="submit">Look up email</button>
+            </form>
+            <p>Or call this endpoint directly: <code>/?email=example@gmail.com</code></p>
+        </body>
+        </html>
+        """
+
+        return Response(html_response, mimetype='text/html')
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
