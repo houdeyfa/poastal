@@ -86,7 +86,11 @@ def poastal():
             }
         })
     else:
-        return 'No email address provided.'
+        return jsonify({
+            'error': 'No email address provided.',
+            'usage': 'Send a GET request to this endpoint with the email query parameter.',
+            'placeholder': '/?email=example@gmail.com'
+        }), 400
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
